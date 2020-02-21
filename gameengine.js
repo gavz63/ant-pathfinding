@@ -12,6 +12,11 @@ const LAYERS = {
     HUD: 5
 };
 
+const GAME_STATES = {
+    PAUSED: "paused",
+    RUNNING: "running in the nineties"
+};
+
 /**
  * The GameEngine class is the heart our game. It maintains the render-update
  * loop and provides all entities with the resources they need to exist and
@@ -36,7 +41,6 @@ class GameEngine {
 
         this.timers = [];
         this.click = false;
-        this.rightClick = false;
         this.score = 0;
         this.chars = [];
         this.keyStack = [];
@@ -46,7 +50,9 @@ class GameEngine {
         this.showOutlines = true;
         this.food = null;
         this.base = null;
+        this.game_state = GAME_STATES.PAUSED;
 
+        this.mousePos = {x: 0, y: 0};
     }
 
     /**
@@ -121,15 +127,14 @@ class GameEngine {
      * Calls draw() on every entity in memory.
      */
     draw() {
-        //this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
-        //this._ctx.save();
+        this._ctx.clearRect(0, 0, this._ctx.canvas.width, this._ctx.canvas.height);
+        this._ctx.save();
         for (let i = 0; i < this._entities.length; i++) {
             for (let j = 0; j < this._entities[i].length; j++) {
                 this._entities[i][j].draw(this._ctx);
             }
         }
-
-        //this._ctx.restore();
+        this._ctx.restore();
     }
 
     /**
@@ -165,6 +170,8 @@ class GameEngine {
         }
         // Clear input
         this._clicks = [];
+
+        this.click = false;
     }
 
 

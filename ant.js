@@ -3,7 +3,7 @@ class Ant extends Entity {
         super(game, x, y);
         this.spritesheet = ASSET_MANAGER.getAsset("./img/Ant.png");
         this.scale = 40;
-        this.radius = 10;
+        this.radius = 15;
         this.speed = 5;
         this.senseRadius = this.radius * 4;
         this.hasFood = false;
@@ -21,42 +21,52 @@ class Ant extends Entity {
         this.wiggleTimer = new TimerCallback(this.game, 0.4, true, function() {
             that.wiggle();
         });
-        this.vec = normalizeV(dirV(this, this.game.food));
 
         this.breadcrumbArray = new ArrayEntity(this);
         this.game.addEntity(this.breadcrumbArray, LAYERS.BREADCRUMBS);
-
-
-        this.pathArray = new ArrayEntity(this);
-        this.game.addEntity(this.pathArray, LAYERS.PATH);
     }
 
     update() {
         if (this.hasFood) {
-            if (pointToCircle(this, this.game.base, this.senseRadius + this.game.base.radius)) {
+            if (circleToCircle(this, this.game.base)) {
                 this.breadcrumbArray.destroy();
                 this.destroy();
                 this.game.base.spawn();
             } else {
-                let that = this;
-                let vecsToAvg = [vector(this.vec.x * 5, this.vec.y * 5)];
-                this.breadcrumbArray.forEach(function(elem) {
-                    if (pointToCircle(that, elem, that.senseRadius + elem.radius)) {
-                        vecsToAvg.push(normalizeV(dirV(that, elem)));
+                let vecsToAvg = [this.vec];
+
+                for (let i = 0; i < this.breadcrumbArray.array.length; i++) {
+                    if (pointToCircle(this, this.breadcrumbArray.array[i], this.breadcrumbArray.array[i].radius)) {
+                        this.breadcrumbArray.array.splice(i);
+                    } else if (pointToCircle(this, this.breadcrumbArray.array[i],
+                        this.senseRadius + this.breadcrumbArray.array[i].radius)) {
+
+                        vecsToAvg.push(normalizeV(dirV(this, this.breadcrumbArray.array[i])));
                     }
-                });
+                }
                 this.vec = normalizeV(avgV(vecsToAvg));
             }
         } else {
-            // wiggle until we find the food
+            // wiggle until we find the food or a path to food
             if (pointToCircle(this, this.game.food, this.senseRadius + this.game.food.radius)) {
                 if (circleToCircle(this, this.game.food)) {
                     this.hasFood = true;
-                    this.vec = vector(this.vec.x * -1, this.vec.y * -1);
+                    this.vec = scaleV(this.vec, -1);
                 } else {
                     this.wiggleTimer.destroy();
                     this.vec = normalizeV(dirV(this, this.game.food));
                 }
+            } else {
+                let vecsToAvg = [this.vec];
+
+                for (let i = 0; i < this.game.entities[LAYERS.PATH].length; i++) {
+                    if (pointToCircle(this, this.game.entities[LAYERS.PATH][i],
+                        this.senseRadius + this.game.entities[LAYERS.PATH][i].radius)) {
+
+                        vecsToAvg.push(normalizeV(dirV(this, this.game.entities[LAYERS.PATH][i])));
+                    }
+                }
+                this.vec = normalizeV(avgV(vecsToAvg));
             }
         }
 
@@ -82,7 +92,8 @@ class Ant extends Entity {
     }
 
     dropPath() {
-        this.pathArray.push(new Path(this.game, this.x, this.y, this));
+        console.log("drop");
+        this.game.addEntity(new Path(this.game, this.x, this.y, this), LAYERS.PATH);
     }
 
     wiggle() {
@@ -100,5 +111,12 @@ class Ant extends Entity {
             return 1;
         }
         return -1;
+    }
+
+    destroy() {
+        super.destroy();
+        this.wiggleTimer.destroy();
+
+        this.dropTimer.destroy();
     }
 }

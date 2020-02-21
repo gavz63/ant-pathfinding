@@ -30,7 +30,7 @@ class Entity {
         if (this.x > 800) {
             this.x = 0;
         }
-        if (this.y > 800) {
+        if (this.y > 700) {
             this.y = 0;
         }
 
@@ -38,7 +38,7 @@ class Entity {
             this.x = 800;
         }
         if (this.y < 0) {
-            this.y = 800;
+            this.y = 700;
         }
     }
 
