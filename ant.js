@@ -63,7 +63,16 @@ class Ant extends Entity {
                     if (pointToCircle(this, this.game.entities[LAYERS.PATH][i],
                         this.senseRadius + this.game.entities[LAYERS.PATH][i].radius)) {
 
-                        vecsToAvg.push(normalizeV(dirV(this, this.game.entities[LAYERS.PATH][i])));
+                        let breadcrumbTouching = false;
+                        for (let j = 0; j < this.breadcrumbArray.array.length; j++) {
+                            if (circleToCircle(this.game.entities[LAYERS.PATH][i], this.breadcrumbArray.array[j])) {
+                                breadcrumbTouching = true;
+                            }
+                        }
+
+                        if (!breadcrumbTouching) {
+                            vecsToAvg.push(normalizeV(dirV(this, this.game.entities[LAYERS.PATH][i])));
+                        }
                     }
                 }
                 this.vec = normalizeV(avgV(vecsToAvg));
