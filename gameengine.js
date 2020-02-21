@@ -5,10 +5,10 @@ const DIRECTION_DOWN = "DOWN";
 
 const LAYERS = {
     BG: 0,
-    GOALS: 1,
-    ANTS: 2,
-    BREADCRUMBS: 3,
-    PATH: 4,
+    GOALS: 4,
+    ANTS: 3,
+    BREADCRUMBS: 1,
+    PATH: 2,
     HUD: 5
 };
 
@@ -43,6 +43,10 @@ class GameEngine {
         this.lastChar = null;
 
         this.currentLevel = 0;
+        this.showOutlines = true;
+        this.food = null;
+        this.base = null;
+
     }
 
     /**
