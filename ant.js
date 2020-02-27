@@ -101,7 +101,6 @@ class Ant extends Entity {
     }
 
     dropPath() {
-        console.log("drop");
         this.game.addEntity(new Path(this.game, this.x, this.y, this), LAYERS.PATH);
     }
 
