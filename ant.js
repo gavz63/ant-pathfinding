@@ -97,7 +97,7 @@ class Ant extends Entity {
     }
 
     dropBreadcrumb() {
-        this.breadcrumbArray.push(new Breadcrumb(this.game, this.x, this.y, this));
+        this.breadcrumbArray.push(new Breadcrumb(this.game, this.x, this.y));
     }
 
     dropPath() {

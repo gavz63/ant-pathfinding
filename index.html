@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Game Project Shell</title>
+    <script type="text/javascript" src="http://24.16.255.56:8888/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./input.js"></script>
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./clock.js"></script>
@@ -24,6 +25,9 @@
     <label for="numOfAnts">Number of Ants</label><br>
     <input type="number" id="numOfAnts" name="numOfAnts" min="1" value="1"><br>
 </form>
+<button id="save" type="button">Save</button>
+<button id="load" type="button">Load</button>
+<div id = "text"></div>
 <p>Drag and drop anthill and cheese to see the ants' versatility.</p>
 
 <canvas id="gameWorld" tabindex="1" width="800" height="700"

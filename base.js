@@ -46,6 +46,5 @@ class Base extends Entity {
 
     spawn() {
         this.game.addEntity(new Ant(this.game, this.x + this.scale / 2, this.y - 20), LAYERS.ANTS);
-        console.log("ant");
     }
 }

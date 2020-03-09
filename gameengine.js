@@ -174,6 +174,13 @@ class GameEngine {
         this.click = false;
     }
 
+    clear() {
+        this.entities[LAYERS.PATH] = [];
+        this.entities[LAYERS.BREADCRUMBS] = [];
+        this.entities[LAYERS.ANTS] = [];
+
+        this.timers = [];
+    }
 
     /**
      * Loops while calling update() and draw().
